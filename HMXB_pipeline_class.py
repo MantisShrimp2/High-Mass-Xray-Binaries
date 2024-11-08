@@ -278,6 +278,7 @@ class pipeline:
         See solar_proper_motion
         See flat_rotation_curve
         returns peculiar velocity in km/s
+        peculiar proper motion components in mas/yr
         works now'''
         long = table['l'] # deg
         lat = table['b'] #deg
@@ -298,11 +299,15 @@ class pipeline:
     
         pec_mu_l = obs_mu_l - mul_sol - rotation_mu_l
         pec_mu_b = obs_mu_b - mub_sol - rotation_mu_b
-        print(pec_mu_l, pec_mu_b)
         #convert to km/s
         V_pec = self.k*dist*np.sqrt(pec_mu_l**2 + pec_mu_b**2)
         table['Peculiar Velocity'] = V_pec
         table['Peculiar Velocity'].unit = u.km/u.s
+        #include the proper motion in mas/yr
+        table['peculiar_mu_l']= pec_mu_l
+        table['peculiar_mu_l'].unit = u.mas/u.yr
+        table['peculiar_mu_b'] = pec_mu_b
+        table['peculiar_mu_b'].unit = u.mas/u.yr
         return table
     def lay_pipe(self,filename,filetype):
         '''Combine everything'''
